@@ -27,9 +27,9 @@ class HomePage extends StatelessWidget {
         title: Text('Xpense App'),
         // backgroundColor: Colors.amber,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: ListView(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Chart(),
           UserTransactions()

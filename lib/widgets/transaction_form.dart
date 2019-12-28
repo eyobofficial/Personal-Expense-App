@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 
-
 class TransactionForm extends StatelessWidget {
-  final Function addTransactionCallback;
+  final Function addCallback;
+  final Function raiseError;
+  final bool isError;
   final titleController = TextEditingController();
   final amountController = TextEditingController();
 
-  TransactionForm(this.addTransactionCallback);
+  TransactionForm({this.addCallback, this.isError, this.raiseError});
+
+  void submitTransaction() {
+    try {
+      final title = titleController.text;
+      final amount = double.parse(amountController.text);
+      addCallback(title, amount);
+    } catch (e) {
+      raiseError();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +38,7 @@ class TransactionForm extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(labelText: 'Title'),
                 controller: titleController,
+                onSubmitted: (_) => submitTransaction()
               ),
             ),
 
@@ -37,20 +49,29 @@ class TransactionForm extends StatelessWidget {
                 horizontal: 12,
               ),
               child: TextField(
-                  decoration: InputDecoration(labelText: 'Amount'),
-                  controller: amountController
-                ),
+                decoration: InputDecoration(labelText: 'Amount'),
+                controller: amountController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                onSubmitted: (_) => submitTransaction()
+              ),
+            ),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: isError
+                  ? Text(
+                      'Please provide a valid values.',
+                      style: TextStyle(color: Colors.red),
+                      textAlign: TextAlign.left,
+                    )
+                  : Text(''),
             ),
 
             // Add Button
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: FlatButton(
-                onPressed: () {
-                  final title = titleController.text;
-                  final amount = double.parse(amountController.text);
-                  addTransactionCallback(title, amount);
-                },
+                onPressed: submitTransaction,
                 textColor: Colors.purple,
                 child: Text(
                   'Add Transaction',
