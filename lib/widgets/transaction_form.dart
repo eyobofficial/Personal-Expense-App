@@ -1,86 +1,85 @@
 import 'package:flutter/material.dart';
 
-class TransactionForm extends StatelessWidget {
+class TransactionForm extends StatefulWidget {
   final Function addCallback;
-  final Function raiseError;
-  final bool isError;
+
+  TransactionForm(this.addCallback);
+
+  @override
+  _TransactionFormState createState() => _TransactionFormState();
+}
+
+class _TransactionFormState extends State<TransactionForm> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
 
-  TransactionForm({this.addCallback, this.isError, this.raiseError});
-
   void submitTransaction() {
-    try {
-      final title = titleController.text;
-      final amount = double.parse(amountController.text);
-      addCallback(title, amount);
-    } catch (e) {
-      raiseError();
+    final title = titleController.text;
+    final amountText = amountController.text;
+
+    if (title.isNotEmpty && amountText.isNotEmpty) {
+      try {
+        final amount = double.parse(amountText);
+        widget.addCallback(title, amount);
+        Navigator.of(context).pop();
+
+        // Clear controllers
+        titleController.clear();
+        amountController.clear();
+      } catch (e) {
+        print('Error Occured. Handle error here...');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(12),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            // Title Input
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 3,
-                horizontal: 12,
-              ),
-              child: TextField(
-                decoration: InputDecoration(labelText: 'Title'),
-                controller: titleController,
-                onSubmitted: (_) => submitTransaction()
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // Title Input
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 3,
+              horizontal: 12,
             ),
+            child: TextField(
+              decoration: InputDecoration(labelText: 'Title'),
+              controller: titleController,
+              onSubmitted: (_) => submitTransaction()
+            ),
+          ),
 
-            // Amount Input
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 3,
-                horizontal: 12,
-              ),
-              child: TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
-                controller: amountController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                onSubmitted: (_) => submitTransaction()
-              ),
+          // Amount Input
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 3,
+              horizontal: 12,
             ),
+            child: TextField(
+              decoration: InputDecoration(labelText: 'Amount'),
+              controller: amountController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: (_) => submitTransaction()
+            ),
+          ),
 
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: isError
-                  ? Text(
-                      'Please provide a valid values.',
-                      style: TextStyle(color: Colors.red),
-                      textAlign: TextAlign.left,
-                    )
-                  : Text(''),
-            ),
-
-            // Add Button
-            Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: FlatButton(
-                onPressed: submitTransaction,
-                textColor: Colors.purple,
-                child: Text(
-                  'Add Transaction',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+          // Add Button
+          Padding(
+            padding: const EdgeInsets.only(top: 24, right: 12),
+            child: RaisedButton(
+              onPressed: submitTransaction,
+              color: Colors.deepPurple,
+              textColor: Colors.white,
+              child: Text(
+                'Add Transaction',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -9,7 +9,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 420,
       child: ListView.builder(
         itemBuilder: (ctx, idx) {
           return Card(
@@ -29,14 +29,14 @@ class TransactionList extends StatelessWidget {
                     margin: EdgeInsets.only(right: 8),
                     padding: EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                       shape: BoxShape.circle,
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       '\$${transactions[idx].amount.toStringAsFixed(2)}',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -49,10 +49,7 @@ class TransactionList extends StatelessWidget {
                         padding: EdgeInsets.only(bottom: 6),
                         child: Text(
                           transactions[idx].title,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.title,
                         ),
                       ),
                       Container(
