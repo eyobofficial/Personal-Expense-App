@@ -4,8 +4,9 @@ import '../models/transaction.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transaction;
+  final Function deleteCallback;
 
-  TransactionCard(this.transaction);
+  TransactionCard(this.transaction, {@required this.deleteCallback});
 
   @override
   Widget build(BuildContext context) => Card(
@@ -30,7 +31,7 @@ class TransactionCard extends StatelessWidget {
             subtitle: Text(transaction.formattedDate),
             trailing: IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () {},
+              onPressed: () => deleteCallback(transaction.id),
             ),
           ),
         ),

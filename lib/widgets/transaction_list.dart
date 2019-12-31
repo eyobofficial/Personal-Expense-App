@@ -5,8 +5,9 @@ import './transaction_detail.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function deleteCallback;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, {@required this.deleteCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,10 @@ class TransactionList extends StatelessWidget {
               ],
             )
           : ListView.builder(
-              itemBuilder: (ctx, idx) => TransactionCard(transactions[idx]),
+              itemBuilder: (ctx, idx) => TransactionCard(
+                transactions[idx],
+                deleteCallback: deleteCallback,
+              ),
               itemCount: transactions.length,
             ),
     );

@@ -22,6 +22,9 @@ class XpenseApp extends StatelessWidget {
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
+              button: TextStyle(
+                color: Colors.white,
+              ),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -78,18 +81,24 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Transaction> get _recentTransactions {
-    var lastWeek = DateTime.now().subtract(Duration(days: 7),);
+    var lastWeek = DateTime.now().subtract(
+      Duration(days: 7),
+    );
     return _transactions.where((trx) => trx.date.isAfter(lastWeek)).toList();
   }
 
-  void _addTransaction(String title, double amount) {
+  void _addTransaction(String title, double amount, DateTime date) {
     final newTransaction = Transaction(
         id: DateTime.now()
             .toString(), // TODO: Temporary solution to make the ID unique
         title: title,
         amount: amount,
-        date: DateTime.now());
+        date: date);
     setState(() => _transactions.add(newTransaction));
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() => _transactions.removeWhere((trx) => trx.id == id));
   }
 
   void _openFormModalSheet(BuildContext context) {
@@ -115,7 +124,10 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: <Widget>[
           Chart(_recentTransactions),
-          TransactionList(_transactions.reversed.toList()),
+          TransactionList(
+            _transactions.reversed.toList(),
+            deleteCallback: _deleteTransaction,
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
