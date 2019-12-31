@@ -71,7 +71,7 @@ class _TransactionFormState extends State<TransactionForm> {
             padding: const EdgeInsets.only(top: 24, right: 12),
             child: RaisedButton(
               onPressed: submitTransaction,
-              color: Colors.deepPurple,
+              color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               child: Text(
                 'Add Transaction',
