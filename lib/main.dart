@@ -11,9 +11,9 @@ class XpenseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Xpense',
+      title: 'Xpensify',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.teal,
         accentColor: Colors.amber,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
@@ -43,6 +43,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // TODO: Retrieve data from SQLite database
   final List<Transaction> _transactions = [
     Transaction(
       id: 't01',
@@ -54,14 +55,37 @@ class _HomePageState extends State<HomePage> {
       id: 't02',
       title: 'Coffee Beans',
       amount: 76.99,
-      date: DateTime(2019, 6, 30),
+      date: DateTime.now().subtract(Duration(days: 1)),
+    ),
+    Transaction(
+      id: 't03',
+      title: 'Bottled Water',
+      amount: 12.99,
+      date: DateTime.now().subtract(Duration(days: 1)),
+    ),
+    Transaction(
+      id: 't04',
+      title: 'Juice',
+      amount: 35.50,
+      date: DateTime.now().subtract(Duration(days: 2)),
+    ),
+    Transaction(
+      id: 't05',
+      title: 'Mobile Card',
+      amount: 50.00,
+      date: DateTime.now().subtract(Duration(days: 3)),
     ),
   ];
+
+  List<Transaction> get _recentTransactions {
+    var lastWeek = DateTime.now().subtract(Duration(days: 7),);
+    return _transactions.where((trx) => trx.date.isAfter(lastWeek)).toList();
+  }
 
   void _addTransaction(String title, double amount) {
     final newTransaction = Transaction(
         id: DateTime.now()
-            .toString(), // Temporary solution to make the ID unique
+            .toString(), // TODO: Temporary solution to make the ID unique
         title: title,
         amount: amount,
         date: DateTime.now());
@@ -80,7 +104,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Xpense App'),
+        title: Text('Xpensify'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
@@ -90,7 +114,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView(
         children: <Widget>[
-          Chart(),
+          Chart(_recentTransactions),
           TransactionList(_transactions.reversed.toList()),
         ],
       ),
